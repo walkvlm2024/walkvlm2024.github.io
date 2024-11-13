@@ -33,6 +33,12 @@
     <script src="./static/js/index.js"></script>
 
 
+    <style>
+        .left-align {
+            text-align: left;
+        }
+    </style>
+
 </head>
 
 
@@ -249,7 +255,22 @@ Finally, we have established a solid benchmark for blind walking task and verifi
             <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="1280"
                     height="160" src="assets/mannul_process.jpg"></td>
         <center>
-            <h5 class="title is-6">The data annotation pipeline for constructing the walking awareness dataset. </h5>
+            <h5 class="title is-6 left-align">The data annotation pipeline for constructing the walking awareness dataset. </h5>
+        </center>
+
+
+        <hr />
+        <h4 class="title is-5">Geographical distribution</h4>
+
+<!--        <hr />-->
+<!--            <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="1000" height="120" src="assets/map.jpg"></td>-->
+<td style="padding-left: 0px; padding-bottom: 0px;">
+    <img class="center" width="667" height="80" src="assets/map.jpg" style="display: block; margin-left: auto; margin-right: auto;">
+</td>
+        <center>
+            <h5 class="title is-6 left-align">Visualization results of the WAD dataset sorted by region.
+    The WAD dataset has a wide range of sources, and the samples and categories shown are randomly obtained from the dataset.
+    The pie chart in the lower left corner shows the proportion of video length from different regions. </h5>
         </center>
 
        <hr />
@@ -259,7 +280,7 @@ Finally, we have established a solid benchmark for blind walking task and verifi
             <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="1280"
                     height="160" src="assets/data_data.png"></td>
         <center>
-            <h5 class="title is-6"> Static information comparison of different datasets in blind walking task. WAD dataset holds a significant advantage in terms of sample numbers, categories, and modalities.</h5>
+            <h5 class="title is-6 left-align"> Static information comparison of different datasets in blind walking task. WAD dataset holds a significant advantage in terms of sample numbers, categories, and modalities.</h5>
         </center>
 
 
@@ -275,15 +296,41 @@ Finally, we have established a solid benchmark for blind walking task and verifi
             <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="1280"
                     height="160" src="assets/fig_main.png"></td>
         <center>
-            <h5 class="title is-6">    An overview of the proposed WalkVLM framework.
+            <h5 class="title is-6 left-align">    An overview of the proposed WalkVLM framework.
     WalkVLM employs CoT-based hierarchical planning to summarize the static attributes and understanding of scenes, thereby facilitating the subsequent reminder and QA tasks.
     Furthermore, temporal-aware adaptive prediction has been proposed to calculate the trigger state of VLM, thereby reducing the temporal redundancy of outputs.</h5>
         </center>
 
-
     </section>
 
 
+
+    <section class="section" id="Results">
+        <hr />
+        <h2 class="title is-3"> Results</h2>
+
+        <h4 class="title is-5"> Quantitative results </h4>
+
+            <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="1280"
+                    height="160" src="assets/results.png"></td>
+        <center>
+            <h5 class="title is-6 left-align">   Quantitative comparison of different methods on reminder and QA tasks.
+WalkVLM leads in almost all the TF-IDF, ROUGE, and GPT Score metrics.
+The higher the metric, the better the result.
+Bold and underline indicate the best and the second-best, respectively.</h5>
+        </center>
+
+        <hr />
+        <h4 class="title is-5"> Qualitative results </h4>
+
+            <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="1280"
+                    height="160" src="assets/visual.png"></td>
+        <center>
+            <h5 class="title is-6 left-align">       Visualization comparison of different VLM models.
+    Compared to other models, WalkVLM is able to generate concise and informative answers, providing users with a good experience in blind walking.</h5>
+        </center>
+
+    </section>
 
 <!--           <section class="section" id="visual">-->
 <!--        <hr />-->
