@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="description"
-        content="ILDiff">
+        content="WalkVLM">
     <meta name="keywords" content="Text-to-Video, Diffusion Model">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>ILDiff</title>
@@ -31,7 +31,11 @@
     <script src="./static/js/bulma-carousel.min.js"></script>
     <script src="./static/js/bulma-slider.min.js"></script>
     <script src="./static/js/index.js"></script>
+
+
 </head>
+
+
 
 <body>
 
@@ -42,7 +46,7 @@
         <div class="columns is-centered">
           <div class="column has-text-centered">
             <h2 class="title is-2 publication-title">
-                <img class="center" width="100" height="35" src="assets/walkvlm2.png">
+                <img class="center" width="170" height="100" src="assets/walkvlm2.png">
                 : Aid Visually Impaired People Walking by Vision Language Model
             </h2>
             <div class="is-size-5 publication-authors">
@@ -90,14 +94,13 @@
           <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified">
             <p>
-            High-quality animated stickers usually contain transparent channels, which are often ignored by current video generation models.
-To generate fine-grained animated transparency channels, existing methods can be roughly divided into video matting algorithms and diffusion-based algorithms.
-The methods based on video matting have poor performance in dealing with semi-open areas in stickers, while diffusion-based methods are often used to model a single image, which will lead to local flicker when modeling animated stickers.
-In this paper, we firstly propose an ILDiff method to generate
-animated transparent  channels through implicit layout distillation, which solves the problems of semi-open area collapse and
-no consideration of temporal information in existing methods.
-Secondly, we create the Transparent Animated Sticker Dataset (TASD), which contains 0.32M high-quality samples with transparent channel, to provide data support for related fields.
-Extensive experiments demonstrate that ILDiff can produce finer and smoother transparent channels compared to other methods such as Matting Anything and Layer Diffusion.
+Approximately 200 million individuals around the world suffer from varying degrees of visual impairment, making it crucial to leverage AI technology to offer walking assistance for these people.
+With the recent progress of vision-language models (VLMs), employing VLMs to improve this field has emerged as a popular research topic.
+However, most existing methods are studied on self-built question-answering datasets, lacking a unified training and testing benchmark for walk guidance.
+Moreover, in blind walking task, it is necessary to perform real-time streaming video parsing and generate concise yet informative reminders, which poses a great challenge for VLMs that suffer from redundant responses and low inference efficiency.
+<b>In this paper, we firstly release a diverse, extensive, and unbiased walking awareness dataset, containing 12k video-manual annotation pairs from Europe and Asia to provide a fair training and testing benchmark for blind walking task.
+Furthermore, a WalkVLM model is proposed, which employs chain of thought for hierarchical planning to generate concise but informative reminders and utilizes temporal-aware adaptive prediction to reduce the temporal redundancy of reminders.</b>
+Finally, we have established a solid benchmark for blind walking task and verified the advantages of WalkVLM in stream video processing for this task compared to other VLMs.
             </p>
           </div>
         </div>
@@ -105,364 +108,525 @@ Extensive experiments demonstrate that ILDiff can produce finer and smoother tra
       <!--/ Abstract. -->
 
 
-    <section class="section" id="methods">
+<!--        -->
+
+
+    <section class="section" id="background">
         <hr />
-        <h2 class="title is-3">Method</h2>
+        <h2 class="title is-3">Background</h2>
+
 
         <hr />
+        <h4 class="title is-5">Do you know how blind people live?</h4>
+
+        <!-- 视频容器 -->
+        <div class="video-container">
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+<!--                    Your browser does not support the video tag.-->
+                </video>
+            </div>
+            <!-- 重复 .video-item 直到你添加完所有的视频 -->
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+<!--                    Your browser does not support the video tag.-->
+                </video>
+            </div>
+<!--             重复 .video-item 直到你添加完所有的视频 -->
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+<!--                    Your browser does not support the video tag.-->
+                </video>
+            </div>
+            <!-- 重复 .video-item 直到你添加完所有的视频 -->
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- 重复 .video-item 直到你添加完所有的视频 -->
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- 重复 .video-item 直到你添加完所有的视频 -->
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- 重复 .video-item 直到你添加完所有的视频 -->
+        </div>
+
+        <h2 class="title is-3"></h2>
+
+                <h2 class="title is-3"></h2>
+
+                <h2 class="title is-3"></h2>
+
+                <h2 class="title is-3"></h2>
+
+        <hr />
+
+        <h4 class="title is-5">They are helpless, wandering, and lack the light of life.</h4>
+
+                <!-- 视频容器 -->
+        <div class="video-container">
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+<!--                    Your browser does not support the video tag.-->
+                </video>
+            </div>
+            <!-- 重复 .video-item 直到你添加完所有的视频 -->
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+<!--                    Your browser does not support the video tag.-->
+                </video>
+            </div>
+<!--             重复 .video-item 直到你添加完所有的视频 -->
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+<!--                    Your browser does not support the video tag.-->
+                </video>
+            </div>
+            <!-- 重复 .video-item 直到你添加完所有的视频 -->
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- 重复 .video-item 直到你添加完所有的视频 -->
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- 重复 .video-item 直到你添加完所有的视频 -->
+            <div class="video-item">
+                <video controls>
+                    <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/20240918-youtube_short/1816738a15aae350c46da34a5b1b4a16.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- 重复 .video-item 直到你添加完所有的视频 -->
+        </div>
+
+        <h2 class="title is-3"></h2>
+
+                <h2 class="title is-3"></h2>
+
+                <h2 class="title is-3"></h2>
+
+                <h2 class="title is-3"></h2>
+
+        <h4 class="title is-5">It's time to use visual language models to illuminate their lives!</h4>
+
+
+    </section>
+
+
+
+    <section class="section" id="dataset">
+        <hr />
+        <h2 class="title is-3">Walking Awareness Dataset</h2>
+
+        <hr />
+        <h4 class="title is-5">Annotation pipeline</h4>
+
+<!--        <hr />-->
+            <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="1280"
+                    height="160" src="assets/mannul_process.jpg"></td>
+        <center>
+            <h5 class="title is-6">The data annotation pipeline for constructing the walking awareness dataset. </h5>
+        </center>
+
+       <hr />
+        <h4 class="title is-5">Compared to other datasets</h4>
+
+<!--        <hr />-->
+            <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="1280"
+                    height="160" src="assets/data_data.png"></td>
+        <center>
+            <h5 class="title is-6"> Static information comparison of different datasets in blind walking task. WAD dataset holds a significant advantage in terms of sample numbers, categories, and modalities.</h5>
+        </center>
+
+
+    </section>
+
+
+    <section class="section" id="methods">
+        <hr />
+        <h2 class="title is-3"> WalkVLM</h2>
+
+        <h4 class="title is-5"> Framework </h4>
+
             <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="1280"
                     height="160" src="assets/fig_main.png"></td>
         <center>
-            <h5 class="title is-6">Exemplary results of animated sticker generation using our proposed approach, RDTF.
-Our method performs well on different generation tasks: (top) Text&image to GIF, (middle) Prediction, (down) Interpolation.
-Gray boxes indicate text or visual guidance.</h5>
+            <h5 class="title is-6">    An overview of the proposed WalkVLM framework.
+    WalkVLM employs CoT-based hierarchical planning to summarize the static attributes and understanding of scenes, thereby facilitating the subsequent reminder and QA tasks.
+    Furthermore, temporal-aware adaptive prediction has been proposed to calculate the trigger state of VLM, thereby reducing the temporal redundancy of outputs.</h5>
         </center>
 
 
     </section>
 
-           <section class="section" id="visual">
-        <hr />
-        <h2 class="title is-3">TASD Dataset</h2>
-        </center>
-        <table align="center">
-                <div class="center-text">
-                </div>
-                <br>
-                <tr>
-                    <td width="95" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Trigger Word</b></td>
-                    <td width="225" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Description</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>GIF</b></td>
-                    <td width="95" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Trigger Word</b></td>
-                    <td width="225" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Description</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>GIF</b></td>
-                </tr>
-
-                <tr>
-                    <td width="95" valign="center" halign="center" align="center"
-                        style="font-size:14px"><br><br><br>unhappy</td>
-                    <td width="225" valign="center" halign="center" align="center"
-                        style="font-size:14px">In the picture, a cute little brown owl is sitting on the ground with its eyes closed, giving people a drowsy feeling. There is a can of Coca-Cola next to the owl.</td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/datasets/16f3e2a469c090cd091cae658a313f95.gif"></td>
-
-                    <td width="95" valign="center" halign="center" align="center"
-                        style="font-size:14px"><br><br><br>hit you</td>
-                    <td width="225" valign="center" halign="center" align="center"
-                        style="font-size:14px">The main character is a small green frog with a crown on its head, looking angry or grumpy. The frog is placed in the center of the picture, wearing a blue vest.</td>
-                     <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/datasets/325aaea940cae35b66794a0218e76c30.gif"></td>
-
-              </tr>
-
-                <tr>
-                    <td width="95" valign="center" halign="center" align="center"
-                        style="font-size:14px"><br><br><br>wow</td>
-                    <td width="225" valign="center" halign="center" align="center"
-                        style="font-size:14px">A cat is drawn simply with large eyes. The cat is sitting and looking up with a surprised or curious expression on his face, as if he has seen something unexpected or intriguing. The cat's appearance and expression bring a playful and cute quality to this image.</td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/datasets/f4a760c679147f4b6c2a36c22d2c4f5f.gif"></td>
-
-                    <td width="95" valign="center" halign="center" align="center"
-                        style="font-size:14px"><br><br><br>shy</td>
-                    <td width="225" valign="center" halign="center" align="center"
-                        style="font-size:14px">A cute pink and white pig with a big mouth stands in the center of the picture. The pig looks like it is smiling or expressing happiness because it has a big eye and round face appearance.</td>
-                     <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/datasets/3540f06fa1f9f84611f3ff0955554493.gif"></td>
-
-              </tr>
-
-                <tr>
-                    <td width="95" valign="center" halign="center" align="center"
-                        style="font-size:14px"><br><br><br>good night</td>
-                    <td width="225" valign="center" halign="center" align="center"
-                        style="font-size:14px">The main character is a small cartoon character wearing a white coat and glasses, who looks like a doctor or an alien. The character is depicted lying on a bed covered with a blanket, giving a feeling of comfort and warmth.</td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/datasets/6953290d8eb654a7237ae870bed3fdc1.gif"></td>
-
-                    <td width="95" valign="center" halign="center" align="center"
-                        style="font-size:14px"><br><br><br>hi</td>
-                    <td width="225" valign="center" halign="center" align="center"
-                        style="font-size:14px">A large green lizard-like creature is shown sitting on the floor, absorbed in a book. The lizard appears to be enjoying the book, showing curiosity and a hint of excitement as it reads. This whimsical creature presents a unique and interesting perspective on the joy of reading.</td>
-                     <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/datasets/988c59368053696d6bb7132dcc46fbe6.gif"></td>
-
-              </tr>
 
 
-            </table>
+<!--           <section class="section" id="visual">-->
+<!--        <hr />-->
+<!--        <h2 class="title is-3">TASD Dataset</h2>-->
+<!--        </center>-->
+<!--        <table align="center">-->
+<!--                <div class="center-text">-->
+<!--                </div>-->
+<!--                <br>-->
+<!--                <tr>-->
+<!--                    <td width="95" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Trigger Word</b></td>-->
+<!--                    <td width="225" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Description</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>GIF</b></td>-->
+<!--                    <td width="95" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Trigger Word</b></td>-->
+<!--                    <td width="225" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Description</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>GIF</b></td>-->
+<!--                </tr>-->
 
-    </section>
+<!--                <tr>-->
+<!--                    <td width="95" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px"><br><br><br>unhappy</td>-->
+<!--                    <td width="225" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px">In the picture, a cute little brown owl is sitting on the ground with its eyes closed, giving people a drowsy feeling. There is a can of Coca-Cola next to the owl.</td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/datasets/16f3e2a469c090cd091cae658a313f95.gif"></td>-->
 
-    <section class="section" id="results">
-        <hr />
-        <h2 class="title is-3">Compare to Other Methods</h2>
-        </center>
-        <table align="center">
-                <div class="center-text">
-                </div>
-                <br>
-                <tr>
-                    <td width="50" valign="middle" halign="left" align="left"
-                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i></i></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Src Img</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>MattingAnything[1]</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>SAM[2]</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>SAM2[3]</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>LayerDiffusion[4]</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Ours</b></td>
-                </tr>
+<!--                    <td width="95" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px"><br><br><br>hit you</td>-->
+<!--                    <td width="225" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px">The main character is a small green frog with a crown on its head, looking angry or grumpy. The frog is placed in the center of the picture, wearing a blue vest.</td>-->
+<!--                     <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/datasets/325aaea940cae35b66794a0218e76c30.gif"></td>-->
 
-                <tr>
-                    <td width="50" valign="middle" halign="left" align="left"
-                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case1 RGB</i></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_Matting.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_SAM1.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_SAM2.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_LayerDiffusion.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_ILDiff.gif"></td>
-                </tr>
-                <tr>
-                    <td width="50" valign="middle" halign="left" align="left"
-                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case1 Alpha</i></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_AGT_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_Matting_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_SAM1_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_SAM2_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_LayerDiffusion_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_ILDiff_alpha.gif"></td>
-                </tr>
+<!--              </tr>-->
 
-                <tr>
-                    <td width="50" valign="middle" halign="left" align="left"
-                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case2 RGB</i></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_Matting.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_SAM1.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_SAM2.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_LayerDiffusion.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_ILDiff.gif"></td>
-                </tr>
-                <tr>
-                    <td width="50" valign="middle" halign="left" align="left"
-                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case2 Alpha</i></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_AGT_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_Matting_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_SAM1_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_SAM2_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_LayerDiffusion_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_ILDiff_alpha.gif"></td>
-                </tr>
+<!--                <tr>-->
+<!--                    <td width="95" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px"><br><br><br>wow</td>-->
+<!--                    <td width="225" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px">A cat is drawn simply with large eyes. The cat is sitting and looking up with a surprised or curious expression on his face, as if he has seen something unexpected or intriguing. The cat's appearance and expression bring a playful and cute quality to this image.</td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/datasets/f4a760c679147f4b6c2a36c22d2c4f5f.gif"></td>-->
 
-                <tr>
-                    <td width="50" valign="middle" halign="left" align="left"
-                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case3 RGB</i></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_Matting.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_SAM1.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_SAM2.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_LayerDiffusion.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_ILDiff.gif"></td>
-                </tr>
-                <tr>
-                    <td width="50" valign="middle" halign="left" align="left"
-                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case3 Alpha</i></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_AGT_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_Matting_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_SAM1_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_SAM2_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_LayerDiffusion_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_ILDiff_alpha.gif"></td>
-                </tr>
+<!--                    <td width="95" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px"><br><br><br>shy</td>-->
+<!--                    <td width="225" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px">A cute pink and white pig with a big mouth stands in the center of the picture. The pig looks like it is smiling or expressing happiness because it has a big eye and round face appearance.</td>-->
+<!--                     <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/datasets/3540f06fa1f9f84611f3ff0955554493.gif"></td>-->
 
-                <tr>
-                    <td width="50" valign="middle" halign="left" align="left"
-                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case4 RGB</i></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_Matting.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_SAM1.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_SAM2.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_LayerDiffusion.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_ILDiff.gif"></td>
-                </tr>
-                <tr>
-                    <td width="50" valign="middle" halign="left" align="left"
-                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case4 Alpha</i></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_AGT_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_Matting_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_SAM1_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_SAM2_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_LayerDiffusion_alpha.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_ILDiff_alpha.gif"></td>
-                </tr>
+<!--              </tr>-->
 
-            </table>
+<!--                <tr>-->
+<!--                    <td width="95" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px"><br><br><br>good night</td>-->
+<!--                    <td width="225" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px">The main character is a small cartoon character wearing a white coat and glasses, who looks like a doctor or an alien. The character is depicted lying on a bed covered with a blanket, giving a feeling of comfort and warmth.</td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/datasets/6953290d8eb654a7237ae870bed3fdc1.gif"></td>-->
 
-    </section>
+<!--                    <td width="95" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px"><br><br><br>hi</td>-->
+<!--                    <td width="225" valign="center" halign="center" align="center"-->
+<!--                        style="font-size:14px">A large green lizard-like creature is shown sitting on the floor, absorbed in a book. The lizard appears to be enjoying the book, showing curiosity and a hint of excitement as it reads. This whimsical creature presents a unique and interesting perspective on the joy of reading.</td>-->
+<!--                     <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/datasets/988c59368053696d6bb7132dcc46fbe6.gif"></td>-->
+
+<!--              </tr>-->
 
 
+<!--            </table>-->
+
+<!--    </section>-->
+
+<!--    <section class="section" id="results">-->
+<!--        <hr />-->
+<!--        <h2 class="title is-3">Compare to Other Methods</h2>-->
+<!--        </center>-->
+<!--        <table align="center">-->
+<!--                <div class="center-text">-->
+<!--                </div>-->
+<!--                <br>-->
+<!--                <tr>-->
+<!--                    <td width="50" valign="middle" halign="left" align="left"-->
+<!--                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i></i></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Src Img</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>MattingAnything[1]</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>SAM[2]</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>SAM2[3]</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>LayerDiffusion[4]</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Ours</b></td>-->
+<!--                </tr>-->
+
+<!--                <tr>-->
+<!--                    <td width="50" valign="middle" halign="left" align="left"-->
+<!--                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case1 RGB</i></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_Matting.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_SAM1.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_SAM2.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_LayerDiffusion.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_ILDiff.gif"></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td width="50" valign="middle" halign="left" align="left"-->
+<!--                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case1 Alpha</i></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_AGT_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_Matting_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_SAM1_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_SAM2_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_LayerDiffusion_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/0a80956f8fb3a561dafd9b3f1929a060_ILDiff_alpha.gif"></td>-->
+<!--                </tr>-->
+
+<!--                <tr>-->
+<!--                    <td width="50" valign="middle" halign="left" align="left"-->
+<!--                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case2 RGB</i></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_Matting.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_SAM1.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_SAM2.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_LayerDiffusion.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_ILDiff.gif"></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td width="50" valign="middle" halign="left" align="left"-->
+<!--                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case2 Alpha</i></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_AGT_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_Matting_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_SAM1_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_SAM2_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_LayerDiffusion_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a16d6bdf90a3de54f6322c28212ad56_ILDiff_alpha.gif"></td>-->
+<!--                </tr>-->
+
+<!--                <tr>-->
+<!--                    <td width="50" valign="middle" halign="left" align="left"-->
+<!--                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case3 RGB</i></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_Matting.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_SAM1.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_SAM2.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_LayerDiffusion.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_ILDiff.gif"></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td width="50" valign="middle" halign="left" align="left"-->
+<!--                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case3 Alpha</i></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_AGT_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_Matting_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_SAM1_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_SAM2_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_LayerDiffusion_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6d64aed1b448b47e34b598be7f7261ce_ILDiff_alpha.gif"></td>-->
+<!--                </tr>-->
+
+<!--                <tr>-->
+<!--                    <td width="50" valign="middle" halign="left" align="left"-->
+<!--                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case4 RGB</i></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_Matting.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_SAM1.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_SAM2.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_LayerDiffusion.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_ILDiff.gif"></td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td width="50" valign="middle" halign="left" align="left"-->
+<!--                        style="font-size:13px; padding-bottom:20px">&nbsp;&nbsp;<i>Case4 Alpha</i></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_AGT_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_Matting_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_SAM1_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_SAM2_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_LayerDiffusion_alpha.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/6a71e15c9e69c9ceef1d4ef2ca5ac7c7_ILDiff_alpha.gif"></td>-->
+<!--                </tr>-->
+
+<!--            </table>-->
+
+<!--    </section>-->
 
 
 
-    <section class="section" id="visual">
-        <hr />
-        <h2 class="title is-3">More Results</h2>
-        </center>
-        <table align="center">
-                <div class="center-text">
-                </div>
-                <br>
-                <tr>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Input GIF</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Output GIF</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Input GIF</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Output GIF</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Input GIF</b></td>
-                    <td width="145" valign="middle" halign="middle" align="center"
-                        style="font-size:14px"><b>Output GIF</b></td>
-                </tr>
 
-                <tr>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/fc563d7521cefcead81b013bf3700a95_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/fc563d7521cefcead81b013bf3700a95_ILDiff.gif"></td>
 
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/f67c7ca4d1f3118a6555183c9f2015ed_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/f67c7ca4d1f3118a6555183c9f2015ed_ILDiff.gif"></td>
+<!--    <section class="section" id="visual">-->
+<!--        <hr />-->
+<!--        <h2 class="title is-3">More Results</h2>-->
+<!--        </center>-->
+<!--        <table align="center">-->
+<!--                <div class="center-text">-->
+<!--                </div>-->
+<!--                <br>-->
+<!--                <tr>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Input GIF</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Output GIF</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Input GIF</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Output GIF</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Input GIF</b></td>-->
+<!--                    <td width="145" valign="middle" halign="middle" align="center"-->
+<!--                        style="font-size:14px"><b>Output GIF</b></td>-->
+<!--                </tr>-->
 
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/f0f4ea9af3e3f9988d9093491fc6806b_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/f0f4ea9af3e3f9988d9093491fc6806b_ILDiff.gif"></td>
+<!--                <tr>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/fc563d7521cefcead81b013bf3700a95_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/fc563d7521cefcead81b013bf3700a95_ILDiff.gif"></td>-->
 
-              </tr>
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/f67c7ca4d1f3118a6555183c9f2015ed_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/f67c7ca4d1f3118a6555183c9f2015ed_ILDiff.gif"></td>-->
 
-                <tr>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/e84417be7f802826125a0a41acea3c80_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/e84417be7f802826125a0a41acea3c80_ILDiff.gif"></td>
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/f0f4ea9af3e3f9988d9093491fc6806b_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/f0f4ea9af3e3f9988d9093491fc6806b_ILDiff.gif"></td>-->
 
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/f0bb494be297874049872bc2e8ada9d6_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/f0bb494be297874049872bc2e8ada9d6_ILDiff.gif"></td>
+<!--              </tr>-->
 
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/dff6a2dbb2e2f5dddbb1902fd69f5306_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/dff6a2dbb2e2f5dddbb1902fd69f5306_ILDiff.gif"></td>
+<!--                <tr>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/e84417be7f802826125a0a41acea3c80_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/e84417be7f802826125a0a41acea3c80_ILDiff.gif"></td>-->
 
-              </tr>
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/f0bb494be297874049872bc2e8ada9d6_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/f0bb494be297874049872bc2e8ada9d6_ILDiff.gif"></td>-->
 
-                <tr>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/dec12ff05b767c02c135a51de68fe9ad_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/dec12ff05b767c02c135a51de68fe9ad_ILDiff.gif"></td>
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/dff6a2dbb2e2f5dddbb1902fd69f5306_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/dff6a2dbb2e2f5dddbb1902fd69f5306_ILDiff.gif"></td>-->
 
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/d13677224c2abe770e0e87605d13270c_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/d13677224c2abe770e0e87605d13270c_ILDiff.gif"></td>
+<!--              </tr>-->
 
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/d170a6e13d18a9c742117762b715e890_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/d170a6e13d18a9c742117762b715e890_ILDiff.gif"></td>
+<!--                <tr>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/dec12ff05b767c02c135a51de68fe9ad_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/dec12ff05b767c02c135a51de68fe9ad_ILDiff.gif"></td>-->
 
-              </tr>
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/d13677224c2abe770e0e87605d13270c_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/d13677224c2abe770e0e87605d13270c_ILDiff.gif"></td>-->
 
-                <tr>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/d28f09edfd4d442f2a642d217e24d11f_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/d28f09edfd4d442f2a642d217e24d11f_ILDiff.gif"></td>
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/d170a6e13d18a9c742117762b715e890_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/d170a6e13d18a9c742117762b715e890_ILDiff.gif"></td>-->
 
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/d7d693e7134ad1823d15e7ac2cec08a4_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/d7d693e7134ad1823d15e7ac2cec08a4_ILDiff.gif"></td>
+<!--              </tr>-->
 
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/c04ef49cee431d28e6d28fb6e7b29b3c_AGT_rgb.gif"></td>
-                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"
-                            height="145" src="assets/compare_methods/c04ef49cee431d28e6d28fb6e7b29b3c_ILDiff.gif"></td>
+<!--                <tr>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/d28f09edfd4d442f2a642d217e24d11f_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/d28f09edfd4d442f2a642d217e24d11f_ILDiff.gif"></td>-->
 
-              </tr>
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/d7d693e7134ad1823d15e7ac2cec08a4_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/d7d693e7134ad1823d15e7ac2cec08a4_ILDiff.gif"></td>-->
 
-            </table>
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/c04ef49cee431d28e6d28fb6e7b29b3c_AGT_rgb.gif"></td>-->
+<!--                    <td align="center" style="padding-left: 0px; padding-bottom: 0px;"><img class="center" width="145"-->
+<!--                            height="145" src="assets/compare_methods/c04ef49cee431d28e6d28fb6e7b29b3c_ILDiff.gif"></td>-->
 
-    </section>
+<!--              </tr>-->
+
+<!--            </table>-->
+
+<!--    </section>-->
 
 
 
@@ -473,8 +637,8 @@ Gray boxes indicate text or visual guidance.</h5>
           <h2 class="title">BibTeX</h2>
           <p> If you use our work in your research, please cite: </p>
           <pre><code>
-            @misc{anonymous2024ILDiff,
-            title={ILDiff: Generate Transparent Animated Stickers by Implicit Layout Distillation},
+            @misc{anonymous2024WalkVLM,
+            title={WalkVLM: Aid Visually Impaired People Walking by Vision Language Model},
             author={Anonymous},
             archivePrefix={arXiv},
             primaryClass={cs.CV}}

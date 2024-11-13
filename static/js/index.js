@@ -29,6 +29,11 @@ $(document).ready(function() {
 
     });
 
+    $('.video-container').on('wheel', function(e) {
+        e.preventDefault();
+        this.scrollLeft += e.originalEvent.deltaY;
+    });
+
     var options = {
 			slidesToScroll: 1,
 			slidesToShow: 3,
