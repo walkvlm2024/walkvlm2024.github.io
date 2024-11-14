@@ -1,16 +1,20 @@
 .video-container {
     display: flex; /* 使用Flexbox布局 */
     overflow-x: auto; /* 允许水平滚动 */
-    gap: 10px; /* 设置视频之间的间隙为0 */
+    gap: 15px; /* 设置视频之间的间隙为10px */
 }
 
 .video-item {
-    flex: 0 0 60%; /* 每个项目占据30%的宽度，并且不伸缩 */
+    flex: 0 0 auto; /* 不伸缩，不基于flex-basis缩放 */
+    width: 440px; /* 可以设置一个固定宽度，或者根据需要调整 */
+    height: 330px; /* 设置一个固定高度，确保所有视频高度一致 */
+    overflow: hidden; /* 如果视频超出容器，隐藏超出部分 */
 }
 
 .video-item video {
-    width: 100%; /* 视据宽度占满父容器 */
-    height: auto; /* 高度自适应 */
+    width: 100%; /* 视频宽度占满父容器 */
+    height: 100%; /* 视频高度占满父容器 */
+    object-fit: cover; /* 保持视频宽高比，覆盖父容器 */
 }
 
 
