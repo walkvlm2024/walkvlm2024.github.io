@@ -45,6 +45,15 @@ video {
 
 body {
   font-family: 'Noto Sans', sans-serif;
+    margin: 0;
+    height: 100vh; /* 使body高度占满整个视口 */
+    background-image: url('background.jpg'); /* 替换为你的图片路径 */
+    background-size: cover; /* 图片覆盖整个背景 */
+    background-position: center; /* 图片居中 */
+    background-repeat: no-repeat; /* 防止图片重复 */
+    display: flex;
+    justify-content: center;
+    align-items: center; /* 内容居中 */    
 }
 
 
