@@ -45,20 +45,20 @@ video {
 
 body {
   font-family: 'Noto Sans', sans-serif;
-    background-image: url('https://img1.baidu.com/it/u=458657960,503210514&fm=253&fmt=auto&app=138&f=JPEG?w=667&h=500'); /* 替换为你的图片路径 */
-            background-size: cover;
-            /* 设置背景图片位置 */
-            background-position: center;
-            /* 设置背景图片不重复 */
-            background-repeat: no-repeat;
-            /* 设置背景图片固定，不随滚动条滚动 */
-            background-attachment: fixed;
-            background-color: rgba(255, 255, 255, 0.2);
-            /* 页面内容居中 */
-            justify-content: center;
-            align-items: center;
-            /* 移除默认的margin */
-            margin: 0;
+    background-image: url('https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm//bk1_alp.jpg'); /* 替换为你的图片路径 */
+    background-size: cover;
+    /* 设置背景图片位置 */
+    background-position: center;
+    /* 设置背景图片不重复 */
+    background-repeat: no-repeat;
+    /* 设置背景图片固定，不随滚动条滚动 */
+    background-attachment: fixed;
+    background-color: rgba(255, 255, 255, 0.9);
+    /* 页面内容居中 */
+    justify-content: center;
+    align-items: center;
+    /* 移除默认的margin */
+    margin: 0;
     }
 
 
