@@ -45,6 +45,13 @@
             justify-content: space-between;
         }
         
+        .video-container2 {
+            display: flex;
+            justify-content: center;
+            /* align-items: center; */
+            /* height: 100vh; 使容器高度占满整个视口 */
+        }
+
 .container111 {
     display: flex;
     width: 100%;
@@ -479,6 +486,36 @@ Bold and underline indicate the best and the second-best, respectively.</h5>
 
                 <hr />
         <h4 class="title is-5"> Streaming inference </h4>
+
+        <!-- 视频容器 -->
+        <!-- <div class="video-container"> -->
+            <!-- <div class="video-item"> -->
+                <!-- <video controls> -->
+                    <!-- <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/background/bk_4s.mp4" type="video/mp4"> -->
+<!--                    Your browser does not support the video tag.-->
+                <!-- </video> -->
+            <!-- </div> -->
+        <!-- </div> -->
+        <div class="video-container2">
+            <video controls style="width: 650px; height: 533px;">
+                <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/comp_movies/stream_comp.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <!-- <video controls style="width: 640px; height: 360px;">
+            <source src="https://sprproxy-1258344707.cos.ap-shanghai.myqcloud.com/seraphyuan/ilabel/blind_vlm/background/bk_4s.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video> -->
+
+        <br />
+
+        <center>
+            <h5 class="title is-6 left-align">       Visualization comparison of video stream inference on the blind walking task between WalkVLM and MiniCPM-V2.6 with the same parameter magnitude.
+                Our method can generate more concise reminders with lower temporal redundancy, but there is still room for important event ranking, error identification and fine-grained recognition.
+                See Appendix C.3 for a more detailed analysis.
+    </h5>
+        </center>
 
     </section>
 
